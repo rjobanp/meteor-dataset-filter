@@ -73,4 +73,4 @@ datasetFilter.prototype.destroy = function() {
   Session.set('filterQuery' + this.seshId, "");
 }
 
-DatasetFilter = datasetFilter;
+Meteor.datasetFilter = datasetFilter;
