@@ -6,4 +6,5 @@ Package.on_use(function(api, where) {
   api.use('jquery', 'client');
   api.add_files('bloodhound.js', 'client');
   api.add_files('dataset_filter.js', 'client');
+  api.export('DatasetFilter', 'client');
 });

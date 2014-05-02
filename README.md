@@ -10,7 +10,7 @@ Reactive filtering for client-side data powered by twitter typeahead.js bloodhou
   /*
     Initialization
   */
-  new Meteor.datasetFilter({
+  new DatasetFilter({
     dataset: users, // dataset can be any array of objects
     queryKey: 'name', // the field to query matches on
     updateCallback: function() {
@@ -41,21 +41,19 @@ Reactive filtering for client-side data powered by twitter typeahead.js bloodhou
 
 ```javascript
 Template.userList.created = function() {
-
   var users = [
     {name: 'Barack Obama', email: 'barack@whitehouse.gov', phone: '555-555-0816'},
     {name: 'George W. Bush', email: 'gw@whitehouse.gov', phone: '555-555-0008'},
     {name: 'Bill Clinton', email: 'bill@whitehouse.gov', phone: '555-555-9200'}
   ];
 
-  usersFilter = new Meteor.datasetFilter({
+  usersFilter = new DatasetFilter({
     dataset: users,
     queryKey: 'name',
     updateCallback: function() {
       $('#user-list-area').resize();
     }
   });
-
 }
 
 Template.userList.filteredUsers = function() {
@@ -75,7 +73,6 @@ Template.userList.destroyed = function() {
 
 ```html
 <template name="userList">
-
   <input type="text" id="filter-users" placeholder="Filter">
 
   <div id="user-list-area">
@@ -83,7 +80,6 @@ Template.userList.destroyed = function() {
       <p>{{name}}<br>{{email}}<br>{{phone}}</p>
     {{/each}}
   </div>
-
 </template>
 ```
 
@@ -91,9 +87,7 @@ Template.userList.destroyed = function() {
 
 ```javascript
 Template.userList.created = function() {
-
   Deps.autorun(function() {
-
     // Clean up the last filter object
     if (typeof usersFilter === 'object') {
       usersFilter.destroy();
@@ -104,13 +98,11 @@ Template.userList.created = function() {
       party: Session.get('politicalParty')
     }).fetch();
 
-    usersFilter = new Meteor.datasetFilter({
+    usersFilter = new DatasetFilter({
       dataset: users,
       queryKey: 'name'
     });
-
   });
-
 }
 
 
@@ -131,7 +123,6 @@ Template.userList.destroyed = function() {
 
 ```html
 <template name="userList">
-
   <input type="text" id="filter-users" placeholder="Filter">
 
   <div id="user-list-area">
@@ -139,7 +130,6 @@ Template.userList.destroyed = function() {
       <p>{{name}}<br>{{email}}<br>{{phone}}</p>
     {{/each}}
   </div>
-
 </template>
 ```
 
