@@ -65,7 +65,7 @@ Template.userList.filteredUsers = function() {
 
 Template.userList.events({
   'input #filter-users': function(event, template) {
-    usersFilter.setQuery($(e.currentTarget).val())
+    usersFilter.setQuery($(event.currentTarget).val())
   }
 });
 
@@ -116,7 +116,7 @@ Template.userList.filteredUsers = function() {
 
 Template.userList.events({
   'input #filter-users': function(event, template) {
-    usersFilter.setQuery($(e.currentTarget).val())
+    usersFilter.setQuery($(event.currentTarget).val())
   }
 });
 
