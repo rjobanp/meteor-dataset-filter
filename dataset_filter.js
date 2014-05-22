@@ -8,12 +8,12 @@ function datasetFilter (options) {
     }
   */
 
-  this.seshId = String(Math.round(Math.random()*10000));
+  this.dataDependency = new Deps.Dependency;
 
-  this.setDefaults();
-
-  this.dataset = options.dataset;
+  this.dataset = this.filteredSet = options.dataset;
   this.updateCallback = options.updateCallback;
+
+  this.query = '';
 
   this.engine = new Bloodhound({
     local: this.dataset,
@@ -25,52 +25,57 @@ function datasetFilter (options) {
   });
 
   this.engine.initialize();
-
-  Deps.autorun(function(c) {
-    this.c1 = c;
-
-    var datas = [];
-    var filterQuery = Session.get('filterQuery' + this.seshId);
-
-    if ( filterQuery ) {
-      this.engine.get(filterQuery, function(datas2) {
-        datas2.forEach(function(data) {
-          datas.push(data);
-        });
-      });
-    }
-    if ( datas.length < 1 ) {
-      datas = this.dataset;
-    }
-
-    Session.set('filterSet' + this.seshId, datas);
-
-    Deps.afterFlush(this.updateCallback);
-
-  }.bind(this));
-
-}
-
-datasetFilter.prototype.setDefaults = function() {
-  Session.setDefault('filterQuery' + this.seshId, "");
-  Session.setDefault('filterSet' + this.seshId, []);
 }
 
 datasetFilter.prototype.setQuery = function(query) {
-  Session.set('filterQuery' + this.seshId, query);
+  this.query = query;
+
+  var datas = [];
+  if ( this.query ) {
+    this.engine.get(this.query, function(datas2) {
+      datas2.forEach(function(data) {
+        datas.push(data);
+      });
+    });
+  }
+  if ( datas.length < 1 ) {
+    this.filteredSet = this.dataset;
+  } else {
+    this.filteredSet = datas;
+  }
+
+  this.dataDependency.changed();
+
+  Deps.afterFlush(this.updateCallback);
 }
 
 datasetFilter.prototype.getResults = function() {
-  return Session.get('filterSet' + this.seshId)
+  this.dataDependency.depend();
+  return this.filteredSet
+}
+
+datasetFilter.prototype.updateDataset = function(newQueryKey, newDataset) {
+  this.dataset = this.filteredSet = newDataset;
+  
+  this.engine.clear();
+
+  this.engine = new Bloodhound({
+    local: this.dataset,
+    datumTokenizer: function(d) {
+      return Bloodhound.tokenizers.whitespace(d[newQueryKey]);
+    },
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    limit: this.dataset.length
+  });
+
+  this.engine.initialize();
+
+  this.setQuery(this.query);
 }
 
 datasetFilter.prototype.destroy = function() {
-  this.c1 && this.c1.stop();
-  this.dataset = null;
+  this.dataset = this.filteredSet = this.dataDependency = null;
   this.engine.clear();
-
-  Session.set('filterSet' + this.seshId, []);
-  Session.set('filterQuery' + this.seshId, "");
 }
 
 DatasetFilter = datasetFilter;

@@ -31,8 +31,11 @@ Reactive filtering for client-side data powered by twitter typeahead.js bloodhou
     // set the query to filter on
     // see typeahead.js bloodhound docs for more info on filtering
 
+  updateDataset(newQueryKey, newDataset)
+    // set a new dataset and/or new query key
+
   destroy()
-    // cleanup method when done
+    // cleanup filter when done
 ```
 
 ## Usage
@@ -88,23 +91,24 @@ Template.userList.destroyed = function() {
 ```javascript
 Template.userList.created = function() {
   Deps.autorun(function() {
-    // Clean up the last filter object
-    if (typeof usersFilter === 'object') {
-      usersFilter.destroy();
-    }
-    
+    // This find() can be any reactive datasource
     var users = Users.find({
       type: 'president',
       party: Session.get('politicalParty')
     }).fetch();
 
-    usersFilter = new DatasetFilter({
-      dataset: users,
-      queryKey: 'name'
-    });
+    // If the filter already exists just update the dataset
+    if (typeof usersFilter === 'object') {
+      usersFilter.updateDataset('name', users);
+    } else {
+    // Otherwise initialize the filter
+      usersFilter = new DatasetFilter({
+        dataset: users,
+        queryKey: 'name'
+      });
+    }
   });
 }
-
 
 Template.userList.filteredUsers = function() {
   return usersFilter.getResults()
