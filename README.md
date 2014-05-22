@@ -71,6 +71,7 @@ Template.userList.events({
 
 Template.userList.destroyed = function() {
   usersFilter.destroy();
+  usersFilter = null;
 }
 ```
 
@@ -98,7 +99,7 @@ Template.userList.created = function() {
     }).fetch();
 
     // If the filter already exists just update the dataset
-    if (typeof usersFilter === 'object') {
+    if (typeof usersFilter === 'object' && usersFilter !== null) {
       usersFilter.updateDataset('name', users);
     } else {
     // Otherwise initialize the filter
@@ -122,6 +123,7 @@ Template.userList.events({
 
 Template.userList.destroyed = function() {
   usersFilter.destroy();
+  usersFilter = null;
 }
 ```
 
