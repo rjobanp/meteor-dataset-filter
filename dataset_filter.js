@@ -46,7 +46,8 @@ datasetFilter.prototype.setQuery = function(query) {
 
   this.dataDependency.changed();
 
-  Deps.afterFlush(this.updateCallback);
+  if ( this.updateCallback )
+    Deps.afterFlush(this.updateCallback);
 }
 
 datasetFilter.prototype.getResults = function() {
