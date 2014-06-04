@@ -38,7 +38,7 @@ datasetFilter.prototype.setQuery = function(query) {
       });
     });
   }
-  if ( datas.length < 1 ) {
+  if ( datas.length < 1 && ( !this.query || !this.query.length ) ) {
     this.filteredSet = this.dataset;
   } else {
     this.filteredSet = datas;
