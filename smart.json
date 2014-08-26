@@ -1,8 +1,0 @@
-{
-  "name": "dataset-filter",
-  "description": "Reactive filtering for client-side data powered by twitter typeahead.js bloodhound engine",
-  "homepage": "https://github.com/rosh93/meteor-dataset-filter",
-  "author": "Roshan Jobanputra",
-  "version": "0.0.4",
-  "git": "https://github.com/rosh93/meteor-dataset-filter.git"
-}
