@@ -12,7 +12,7 @@ Reactive filtering for client-side data powered by twitter typeahead.js bloodhou
   */
   new DatasetFilter({
     dataset: users, // dataset can be any array of objects
-    queryKey: 'name', // the field to query matches on
+    queryKey: 'name', // the field or array of fields to query matches on
     updateCallback: function() {
       // optional callback to run each time data is filtered
       // useful for updating a scrollbar or resizing operations, etc.
@@ -105,7 +105,7 @@ Template.userList.created = function() {
     // Otherwise initialize the filter
       usersFilter = new DatasetFilter({
         dataset: users,
-        queryKey: 'name'
+        queryKey: ['name', 'party']
       });
     }
   });

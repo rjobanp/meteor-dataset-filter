@@ -3,7 +3,7 @@ function datasetFilter (options) {
   /* 
     options: {
       dataset: [{val: 'abc', _id: '123'}, {val: 'def', _id: '456'}]
-      queryKey: 'val'
+      queryKey: 'val' or ['val', '_id']
       updateCallback: function() { console.log('dataset updated!') }
     }
   */
@@ -18,7 +18,15 @@ function datasetFilter (options) {
   this.engine = new Bloodhound({
     local: this.dataset,
     datumTokenizer: function(d) {
-      return Bloodhound.tokenizers.whitespace(d[options.queryKey]);
+      var tokens  = '';
+      if ( typeof options.queryKey === 'string') {
+        tokens = d[options.queryKey];
+      } else {
+        options.queryKey.forEach(function(key) {
+          tokens += d[key] + ' '
+        });
+      }
+      return Bloodhound.tokenizers.whitespace(tokens);
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace,
     limit: this.dataset.length

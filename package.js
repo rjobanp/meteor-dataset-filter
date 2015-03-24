@@ -1,6 +1,6 @@
 Package.describe({
   summary: "Reactive filtering for client-side data powered by twitter typeahead.js bloodhound engine",
-  version: "0.0.5",
+  version: "0.0.6",
   git: "https://github.com/rosh93/meteor-dataset-filter.git"
 });
 
